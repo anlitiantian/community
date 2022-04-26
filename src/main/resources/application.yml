@@ -2,7 +2,10 @@ server:
   port: 8887
 spring:
   datasource:
-    url:
-    name:
-    password:
-    driver-class-name:
+    url: jdbc:mysql://43.138.16.193:3306/qiyu_community?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    name: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      username: root
+      password: 123456
