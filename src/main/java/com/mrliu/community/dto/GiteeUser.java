@@ -6,12 +6,12 @@ import lombok.Data;
  * @program: community
  * @description:
  * @author: Mr.Liu
- * @create: 2022-04-25 20:47
+ * @create: 2022-04-26 14:21
  **/
 @Data
-public class GithubUser {
-    //登录名
+public class GiteeUser {
     private String login;
     private Long id;
     private String bio;
+    private String avatar_url;
 }

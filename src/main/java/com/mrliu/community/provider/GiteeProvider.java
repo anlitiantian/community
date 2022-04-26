@@ -1,9 +1,12 @@
 package com.mrliu.community.provider;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.mrliu.community.dto.AccessTokenDTO;
+import com.mrliu.community.dto.GiteeUser;
 import com.mrliu.community.dto.GithubUser;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -12,49 +15,52 @@ import java.io.IOException;
  * @program: community
  * @description:
  * @author: Mr.Liu
- * @create: 2022-04-25 20:20
+ * @create: 2022-04-26 14:23
  **/
 @Component
-public class GithubProvider {
-    public String getAccessToken(AccessTokenDTO accessTokenDTO) {
+public class GiteeProvider {
+    @Value("${gitee.accessToken.uri}")
+    private String accessTokenUri;
+    @Value("${gitee.user.info.uri}")
+    private String userInfoUri;
+
+    //获取access_token
+    public String getAccessToken(AccessTokenDTO accessTokenDto){
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
         OkHttpClient client = new OkHttpClient();
 
-        RequestBody body = RequestBody.create(JSON.toJSONString(accessTokenDTO), mediaType);
+        RequestBody body = RequestBody.create(JSON.toJSONString(accessTokenDto), mediaType);
         Request request = new Request.Builder()
-                .url("https://github.com/login/oauth/access_token")
+                .url(accessTokenUri)
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
-            String token = string.split("&")[0].split("=")[1];
-            return token;
+            JSONObject jsonObject = JSONObject.parseObject(string);
+            String access_token = (String) jsonObject.get("access_token");
+
+            return access_token;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-
-    public GithubUser getUser(String accessToken) {
+    //获取用户信息
+    public GiteeUser getUser(String token){
         OkHttpClient client = new OkHttpClient();
-//        Request request = new Request.Builder()
-//                .url("https://api.github.com/user?access_token=" + accessToken)
-//                .build();
         Request request = new Request.Builder()
-                .url("https://api.github.com/user?access_token=")
-                .header("Authorization","token " + accessToken)
+                .url(userInfoUri + token)
+                .header("Authorization", "token " + token)
                 .build();
-
         try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
-            GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
-            return githubUser;
+            GiteeUser giteeUser = JSON.parseObject(string, GiteeUser.class);
+
+            return giteeUser;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-
-
 }

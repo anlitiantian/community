@@ -1,0 +1,8 @@
+server:
+  port: 8887
+spring:
+  datasource:
+    url:
+    name:
+    password:
+    driver-class-name:
