@@ -17,47 +17,56 @@
     <script th:src="@{/js/bootstrap.min.js}" type="application/javascript"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">七鱼社区</a>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-
-            </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="搜索你的问题" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">搜索</button>
-            </form>
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown" th:if="${session.user != null}">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false" th:text="${session.user.getLogin()}">
-
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">消息中心</a></li>
-                        <li><a class="dropdown-item" href="#">个人资料</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">退出登录</a></li>
-                    </ul>
-                </li>
-                <li th:if="${session.user == null}">
-                    <a href="https://gitee.com/oauth/authorize?client_id=333bd3155df1290cfb826e985151c38a2f3409c174ea775cbeecc8b17e75ec4f&redirect_uri=http://localhost:8887/callback&response_type=code&scope=user_info">登录</a>
-                    <!--<a href="https://github.com/login/oauth/authorize?client_id=53f0a0161e8d27c17848&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>-->
-                </li>
-
-            </ul>
+<!--从公共部分提取导航条-->
+<div th:replace="common/navbar :: header"></div>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="jumbotron">
+                <h2>
+                    Hello, world!
+                </h2>
+                <p>
+                    This is a template for a simple marketing or informational website. It includes a large callout
+                    called the hero unit and three supporting pieces of content. Use it as a starting point to create
+                    something more unique.
+                </p>
+                <p>
+                    <a class="btn btn-primary btn-large" href="#">Learn more</a>
+                </p>
+            </div>
         </div>
     </div>
-</nav>
+    <div class="row">
+        <div class="col-md-8">
+            <h2>
+                Heading
+            </h2>
+            <p>
+                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+                condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis
+                euismod. Donec sed odio dui.
+            </p>
+            <p>
+                <a class="btn" href="#">View details »</a>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h2>
+                Heading
+            </h2>
+            <p>
+                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+                condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis
+                euismod. Donec sed odio dui.
+            </p>
+            <p>
+                <a class="btn" href="#">View details »</a>
+            </p>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

@@ -10,4 +10,9 @@
         VALUES
         (#{name}, #{accountId}, #{token}, #{gmtCreate}, #{gmtModified})
     </insert>
+
+    <select id="findByToken" resultType="com.mrliu.community.model.User">
+        SELECT * from <include refid="table_name"/> WHERE token = #{token}
+    </select>
+
 </mapper>

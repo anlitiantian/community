@@ -8,16 +8,20 @@ import lombok.NoArgsConstructor;
  * @program: community
  * @description:
  * @author: Mr.Liu
- * @create: 2022-04-26 16:54
+ * @create: 2022-04-27 14:20
  **/
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Question {
     private Integer id;
-    private String name;
-    private String accountId;
-    private String token;
+    private String title;
+    private String description;
+    private String tag;
     private Long gmtCreate;
     private Long gmtModified;
+    private Integer creator;
+    private Integer commentCount;
+    private Integer viewCount;
+    private Integer likeCount;
 }

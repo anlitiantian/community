@@ -13,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 /**
@@ -44,7 +46,8 @@ public class AuthorizeController {
 
     @GetMapping("callback")
     public String callback(@RequestParam(name = "code") String code,
-                           HttpServletRequest request) {
+                           HttpServletRequest request,
+                           HttpServletResponse response) {
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
@@ -55,17 +58,21 @@ public class AuthorizeController {
         String accessToken = giteeProvider.getAccessToken(accessTokenDTO);
         //2.通过access_token获取用户信息
         GiteeUser giteeUser = giteeProvider.getUser(accessToken);
-        if (giteeUser != null) {
+        if (giteeUser != null && giteeUser.getId() != null) {
             User user = new User();
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setAccountId(String.valueOf(giteeUser.getId()));
             user.setName(giteeUser.getLogin());
-            user.setToken(UUID.randomUUID().toString());
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            userMapper.insert(user);
 
+            //将用户的信息存入数据库
+            userMapper.insert(user);
+            //像response保留一份cookie
+            response.addCookie(new Cookie("qiyu_token", token));
             // 登录成功，写cookie和session
-            request.getSession().setAttribute("user", giteeUser);
+
             return "redirect:/";
         } else {
             // 登录失败，重新登录
