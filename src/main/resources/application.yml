@@ -23,3 +23,8 @@ pagehelper:
   helper-dialect: mysql
   reasonable: true
   support-methods-arguments: true
+
+# MyBatis
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

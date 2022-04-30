@@ -67,7 +67,7 @@
                         <!--<a th:href="@{'/page/' + ${page}}" th:text="${page}"></a>-->
                     </li>
                     <li th:if="${questions.hasNextPage}">
-                        <a class="page-link" th:href="@{href/(page=${questions.nextPage})}">&gt;</a>
+                        <a class="page-link" th:href="@{/(page=${questions.nextPage})}">&gt;</a>
                         <!--<a class="page-link" th:href="@{'/page/' + ${questions.nextPage}}">&gt;</a>-->
                     </li>
                     <li>
