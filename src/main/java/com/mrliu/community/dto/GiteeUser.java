@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class GiteeUser {
     private String login;
-    private Long id;
+    private String id;
     private String bio;
-    private String avatar_url;
+    private String avatarUrl;
 }

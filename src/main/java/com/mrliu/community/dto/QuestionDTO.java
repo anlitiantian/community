@@ -1,28 +1,26 @@
-package com.mrliu.community.model;
+package com.mrliu.community.dto;
 
-import lombok.AllArgsConstructor;
+import com.mrliu.community.model.User;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @program: community
  * @description:
  * @author: Mr.Liu
- * @create: 2022-04-27 14:20
+ * @create: 2022-04-27 21:56
  **/
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Question {
+public class QuestionDTO {
     private Integer id;
     private String title;
     private String description;
     private String tag;
     private Long gmtCreate;
     private Long gmtModified;
-    //保存用户的 accountId
     private String creator;
     private Integer commentCount;
     private Integer viewCount;
     private Integer likeCount;
+
+    private User user;
 }

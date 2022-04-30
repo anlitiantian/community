@@ -1,0 +1,29 @@
+package com.mrliu.community.controller;
+
+import com.mrliu.community.dto.QuestionDTO;
+import com.mrliu.community.service.QuestionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+/**
+ * @program: community
+ * @description:
+ * @author: Mr.Liu
+ * @create: 2022-04-30 09:32
+ **/
+@Controller
+public class QuestionController {
+    @Autowired
+    private QuestionService questionService;
+
+    @GetMapping("/question/{id}")
+    public String question(@PathVariable("id")Integer id, Model model){
+        QuestionDTO questionDTO = questionService.getById(id);
+        model.addAttribute("question",questionDTO);
+        return "question";
+    }
+}

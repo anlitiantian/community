@@ -1,7 +1,6 @@
 package com.mrliu.community.mapper;
 
 import com.mrliu.community.model.User;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -14,5 +13,9 @@ public interface UserMapper {
 
     void insert(User user);
 
-    User findByToken(@Param("token")String token);
+    User selectByToken(@Param("token")String token);
+
+    User selectByAccountId(@Param("accountId")String accountId);
+
+    void update(User user);
 }

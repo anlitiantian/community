@@ -1,7 +1,9 @@
 package com.mrliu.community.mapper;
 
 import com.mrliu.community.model.Question;
-import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @program: community
@@ -13,4 +15,9 @@ public interface QuestionMapper {
 
     void insert(Question question);
 
+    List<Question> list();
+
+    List<Question> listByAccountId(@Param("accountId")String accountId);
+
+    Question selectById(@Param("id")Integer id);
 }

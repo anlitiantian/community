@@ -13,5 +13,7 @@ public class GithubUser {
     //登录名
     private String login;
     private Long id;
+
     private String bio;
+    private String avatarUrl;
 }

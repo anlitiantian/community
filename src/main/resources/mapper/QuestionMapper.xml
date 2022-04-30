@@ -15,8 +15,16 @@
         (#{title}, #{description}, #{gmtCreate}, #{gmtModified}, #{creator}, #{tag})
     </insert>
 
-    <select id="findByToken" resultType="com.mrliu.community.model.User">
+    <select id="list" resultType="com.mrliu.community.model.Question">
+        SELECT * from <include refid="table_name"/>
+    </select>
 
+    <select id="listByAccountId" resultType="com.mrliu.community.model.Question">
+        SELECT * from <include refid="table_name"/> where creator = #{accountId}
+    </select>
+
+    <select id="selectById" resultType="com.mrliu.community.model.Question">
+        SELECT * from <include refid="table_name"/> where id = #{id}
     </select>
 
 </mapper>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 必须的 meta 标签 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title th:text="${question.title}"></title>
+
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap-grid.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap-reboot.min.css}" rel="stylesheet">
+    <link th:href="@{/css/community.css}" rel="stylesheet">
+
+    <script th:src="@{/js/jquery.min.js}" type="application/javascript"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
+    <script th:src="@{/js/bootstrap.min.js}" type="application/javascript"></script>
+</head>
+<body>
+
+<!--从公共部分提取导航条-->
+<div th:replace="common/navbar :: header"></div>
+<div class="container-fluid main profile">
+    <div class="row">
+        <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
+            <h3><span th:text="${question.title}"></span></h3>
+            <span class="text_desc">
+                作者：[[${question.user.name}]] |
+                发布时间：[[${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}]] |
+                阅读数：[[${question.viewCount}]]
+            </span>
+            <hr>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" th:text="${question.description}"></div>
+            <hr>
+            <a th:href="@{'/publish/' + ${question.id}}" class="community-menu" th:if="${session.user != null && session.user.accountId == question.creator}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                </svg>
+                编辑
+            </a>
+        </div>
+        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h4>发起人</h4><br>
+                <div class="media">
+                    <div>
+                        <a href="#">
+                            <img class="mr-3 img-circle media-object" alt="Bootstrap Media Preview"
+                                 th:src="${question.user.avatarUrl}"/>
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="mt-0">
+                            <a href="#" th:text="${question.user.name}"></a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h4>相关问题</h4>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

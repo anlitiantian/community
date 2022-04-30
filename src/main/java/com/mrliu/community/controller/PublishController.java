@@ -32,6 +32,7 @@ public class PublishController {
         model.addAttribute("title",question.getTitle());
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
+        //判断几种不符合的情况
         if(question.getTitle() == null || "".equals(question.getTitle())){
             model.addAttribute("error", "标题不能为空");
             return "publish";
@@ -52,7 +53,7 @@ public class PublishController {
         }
 
         //question里只有title、description、tag，其他信息需要补全
-        question.setCreator(user.getId());
+        question.setCreator(user.getAccountId());
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
         questionMapper.insert(question);

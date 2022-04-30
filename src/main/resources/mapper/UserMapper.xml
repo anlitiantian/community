@@ -6,13 +6,22 @@
 
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.mrliu.community.model.User">
         INSERT INTO <include refid="table_name"/>
-        (name, account_id, token, gmt_create, gmt_modified)
+        (name, account_id, token, gmt_create, gmt_modified, avatar_url)
         VALUES
-        (#{name}, #{accountId}, #{token}, #{gmtCreate}, #{gmtModified})
+        (#{name}, #{accountId}, #{token}, #{gmtCreate}, #{gmtModified}, #{avatarUrl})
     </insert>
 
-    <select id="findByToken" resultType="com.mrliu.community.model.User">
+    <select id="selectByToken" resultType="com.mrliu.community.model.User">
         SELECT * from <include refid="table_name"/> WHERE token = #{token}
     </select>
+
+    <select id="selectByAccountId" resultType="com.mrliu.community.model.User">
+        SELECT * from <include refid="table_name"/> WHERE account_id = #{accountId}
+    </select>
+
+    <update id="update">
+        UPDATE <include refid="table_name"/> SET name=#{name},token=#{token},gmt_modified=#{gmtCreate}, avatar_url=#{avatarUrl}
+        WHERE account_id = #{accountId}
+    </update>
 
 </mapper>
