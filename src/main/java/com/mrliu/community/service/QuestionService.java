@@ -3,6 +3,8 @@ package com.mrliu.community.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mrliu.community.dto.QuestionDTO;
+import com.mrliu.community.exception.CustomizeErrorCode;
+import com.mrliu.community.exception.CustomizeException;
 import com.mrliu.community.mapper.QuestionMapper;
 import com.mrliu.community.mapper.UserMapper;
 import com.mrliu.community.model.Question;
@@ -90,6 +92,10 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
+
         UserExample example = new UserExample();
         example.createCriteria().andAccountIdEqualTo(question.getCreator());
         User user = userMapper.selectByExample(example).get(0);
