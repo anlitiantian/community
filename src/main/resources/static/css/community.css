@@ -2,30 +2,54 @@ body {
     background-color: #efefef;
 }
 
-.main {
+.myContainer-fluid {
+    /*display: block;*/
     background-color: white;
-    margin: 30px;
+    margin: 2rem;
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
-.btn-publish{
+.btn-publish {
     float: right;
     margin-bottom: 15px;
 }
 
-.media-object{
-    width: 80px;
-    height: 80px;
+.media-object {
+    width: 50px;
+    height: 50px;
 }
-.text_desc{
+
+.media-body {
+    /*padding: 21px;*/
+}
+
+.text_desc {
     font-size: 12px;
     font-weight: normal;
     color: #999;
 }
-.profile .section{
+
+.profile .section {
     margin-top: 30px;
 }
 
-.community-menu{
+.community-menu {
     font-size: 17px;
     color: #999;
+}
+
+.comment {
+    margin: 20px 0;
+}
+.menu{
+
+}
+
+.icon{
+    cursor: pointer;
+}
+
+.icon:hover path{
+    fill: #499ef3;
 }

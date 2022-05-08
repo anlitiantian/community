@@ -13,16 +13,26 @@
     <link th:href="@{/css/bootstrap-reboot.min.css}" rel="stylesheet">
     <link th:href="@{/css/community.css}" rel="stylesheet">
 
-
     <script th:src="@{/js/jquery.min.js}" type="application/javascript"></script>
     <script th:src="@{/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
     <script th:src="@{/js/bootstrap.min.js}" type="application/javascript"></script>
+
 </head>
+<script type="application/javascript">
+    window.onload = function (){
+        let closable = window.localStorage.getItem("closable");
+        if(closable == "true"){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
 <body>
+
 
 <!--从公共部分提取导航条-->
 <div th:replace="common/navbar :: header"></div>
-<div class="container-fluid main">
+<div class="myContainer-fluid">
     <div class="row">
         <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
             <h2>
@@ -46,9 +56,9 @@
                     </h4>
                     <span th:text="${question.description}"></span><br>
                     <span class="text_desc">
-                         <span th:text="${question.getCommentCount()}"></span> 个回复 * [[${question.viewCount}]] 次浏览 * [[${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}]]
-                        <!--[[${question.commentCount}]]-->
+                         <span th:text="${question.commentCount}"></span> 个回复 * [[${question.viewCount}]] 次浏览 * [[${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}]]
                     </span>
+                    <hr>
                 </div>
                 <hr/>
             </div>
@@ -62,7 +72,8 @@
                         <a class="page-link" th:href="@{/(page=${questions.prePage})}">&lt;</a>
                         <!--<a class="page-link" th:href="@{'/page/' + ${questions.prePage}}">&lt;</a>-->
                     </li>
-                    <li th:each="page : ${questions.getNavigatepageNums}" th:class="${questions.pageNum == page} ? 'active page-link':'page-link'">
+                    <li th:each="page : ${questions.getNavigatepageNums}"
+                        th:class="${questions.pageNum == page} ? 'active page-link':'page-link'">
                         <a th:href="@{/(page=${page})}" th:text="${page}"></a>
                         <!--<a th:href="@{'/page/' + ${page}}" th:text="${page}"></a>-->
                     </li>

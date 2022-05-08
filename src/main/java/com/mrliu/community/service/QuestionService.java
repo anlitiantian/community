@@ -1,10 +1,12 @@
 package com.mrliu.community.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mrliu.community.dto.QuestionDTO;
 import com.mrliu.community.exception.CustomizeErrorCode;
 import com.mrliu.community.exception.CustomizeException;
+import com.mrliu.community.mapper.QuestionExcMapper;
 import com.mrliu.community.mapper.QuestionMapper;
 import com.mrliu.community.mapper.UserMapper;
 import com.mrliu.community.model.Question;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @program: community
@@ -30,6 +33,9 @@ public class QuestionService {
     private QuestionMapper questionMapper;
 
     @Autowired
+    private QuestionExcMapper questionExcMapper;
+
+    @Autowired
     private UserMapper userMapper;
 
     public PageInfo<QuestionDTO> list(int pageNo, int size) {
@@ -40,7 +46,7 @@ public class QuestionService {
         PageInfo<Question> questionPageInfo = new PageInfo<>(questions, 5);
 
         List<QuestionDTO> questionDTOs = new ArrayList<>();
-        for(Question question : questions){
+        for (Question question : questions) {
             //找到该问题的创建者
             UserExample example = new UserExample();
             example.createCriteria().andAccountIdEqualTo(question.getCreator());
@@ -54,7 +60,7 @@ public class QuestionService {
         }
 
         PageInfo<QuestionDTO> questionDTOPageInfo = new PageInfo<>();
-        BeanUtils.copyProperties(questionPageInfo,questionDTOPageInfo);
+        BeanUtils.copyProperties(questionPageInfo, questionDTOPageInfo);
         questionDTOPageInfo.setList(questionDTOs);
 
         return questionDTOPageInfo;
@@ -71,7 +77,7 @@ public class QuestionService {
         PageInfo<Question> questionPageInfo = new PageInfo<>(questions, 5);
 
         List<QuestionDTO> questionDTOs = new ArrayList<>();
-        for(Question question : questions){
+        for (Question question : questions) {
             //找到该问题的创建者
             UserExample example = new UserExample();
             example.createCriteria().andAccountIdEqualTo(question.getCreator());
@@ -84,15 +90,15 @@ public class QuestionService {
         }
 
         PageInfo<QuestionDTO> questionDTOPageInfo = new PageInfo<>();
-        BeanUtils.copyProperties(questionPageInfo,questionDTOPageInfo);
+        BeanUtils.copyProperties(questionPageInfo, questionDTOPageInfo);
         questionDTOPageInfo.setList(questionDTOs);
 
         return questionDTOPageInfo;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
-        if(question == null){
+        if (question == null) {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
 
@@ -101,22 +107,50 @@ public class QuestionService {
         User user = userMapper.selectByExample(example).get(0);
 
         QuestionDTO questionDTO = new QuestionDTO();
-        BeanUtils.copyProperties(question,questionDTO);
+        BeanUtils.copyProperties(question, questionDTO);
         questionDTO.setUser(user);
         return questionDTO;
     }
 
     public void createOrUpdate(Question question, String isInserting) {
 
-        if("Yes".equals(isInserting)){
+        if ("Yes".equals(isInserting)) {
             // 创建
             question.setGmtCreate(question.getGmtModified());
-            questionMapper.insert(question);
-        }else {
-            //更新
+            questionMapper.insertSelective(question);
+        } else {
+            // 更新
             QuestionExample example = new QuestionExample();
             example.createCriteria().andIdEqualTo(question.getId());
             questionMapper.updateByExampleSelective(question, example);
         }
+    }
+
+    public void increaceView(Long id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExcMapper.increaseView(question);
+    }
+
+    public List<QuestionDTO> getRelatedQues(QuestionDTO questionDTO) {
+        if (StrUtil.isBlank(questionDTO.getTag())) {
+            return new ArrayList<>();
+        }
+        String regExp = StrUtil.replace(questionDTO.getTag(), ",", "|");
+        Question question = new Question();
+        question.setId(questionDTO.getId());
+        question.setTag(regExp);
+
+        List<Question> questions = questionExcMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOs = questions.stream().map(q -> {
+            QuestionDTO dto = new QuestionDTO();
+            BeanUtils.copyProperties(q, dto);
+            return dto;
+        }).collect(Collectors.toList());
+
+
+        return questionDTOs;
+
     }
 }

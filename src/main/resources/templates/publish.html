@@ -22,7 +22,7 @@
 <!--从公共部分提取导航条-->
 <div th:replace="common/navbar :: header"></div>
 
-<div class="container-fluid main">
+<div class="myContainer-fluid main">
     <div class="row">
         <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
             <h2>
@@ -62,7 +62,6 @@
                                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
                                 <div th:text="${error}"></div>
                             </div>
-
                         </div>
                         <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
                             <button type="submit" class="btn btn-success btn-publish">发布问题</button>
