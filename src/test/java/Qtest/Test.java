@@ -3,6 +3,7 @@ package Qtest;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @program: community
@@ -23,20 +24,16 @@ public class Test {
 
     public static void main(String[] args) {
         Test test = new Test();
-        TreeMap<Integer, Integer> map = new TreeMap<>();
-        map.put(1,2);
-        map.remove(1);
-        for(Integer num : map.keySet()){
 
+
+        int[] a = {2,3,1,4};
+        List<Integer> list = Arrays.stream(a).boxed().collect(Collectors.toList());
+        for(int v : list){
+            System.out.println(v);
         }
 
-        PriorityQueue<ListNode> queue = new PriorityQueue<>(new Comparator<ListNode>() {
-            @Override
-            public int compare(ListNode o1, ListNode o2) {
-                return o1.val - o2.val;
-            }
-        });
-        queue.offer(new ListNode(1));
+        Integer[] b = {1,2,3};
+        List<Integer> integers = Arrays.asList(b);
 
     }
 

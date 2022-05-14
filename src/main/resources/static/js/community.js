@@ -94,3 +94,22 @@ function collapseComment(e) {
         });
     }
 }
+
+//展开标签
+function showSelectTag() {
+    $("#select-tag").show();
+}
+//往标签栏添加标签
+function selectTag(e) {
+    let value = e.getAttribute("data-tag");
+    let previous = $("#tag").val();
+    if(!previous.includes(value)){
+        if(previous){
+            $("#tag").val(previous + ',' + value);
+        }else {
+            $("#tag").val(value);
+        }
+    }else {
+
+    }
+}

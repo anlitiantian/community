@@ -3,6 +3,7 @@ package com.mrliu.community.interceptor;
 import com.mrliu.community.mapper.UserMapper;
 import com.mrliu.community.model.User;
 import com.mrliu.community.model.UserExample;
+import com.mrliu.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -25,19 +26,25 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
         //检查cookies数组是否为空，并在cookies中找是否有token,从而判断登陆状态
-        if(cookies != null && cookies.length != 0){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("qiyu_token")){
+        if (cookies != null && cookies.length != 0) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("qiyu_token")) {
                     String token = cookie.getValue();
                     UserExample userExample = new UserExample();
                     userExample.createCriteria().andTokenEqualTo(token);
                     List<User> users = userMapper.selectByExample(userExample);
-                    if(users.size() != 0){
+                    if (users.size() != 0) {
                         request.getSession().setAttribute("user", users.get(0));
+                        // 向session中添加unreadCount个数
+                        Long unreadCount = notificationService.unreadCount(users.get(0).getAccountId());
+                        request.getSession().setAttribute("unreadNotification", unreadCount);
                     }
                     break;
                 }

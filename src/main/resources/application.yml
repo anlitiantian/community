@@ -17,6 +17,7 @@ spring:
       exclude: static
   # Themeleaf
   thymeleaf:
+    # 禁用缓存
     cache: false
 # pageHelper
 pagehelper:

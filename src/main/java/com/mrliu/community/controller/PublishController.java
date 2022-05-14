@@ -1,5 +1,7 @@
 package com.mrliu.community.controller;
 
+import cn.hutool.core.util.StrUtil;
+import com.mrliu.community.cache.TagCache;
 import com.mrliu.community.dto.QuestionDTO;
 import com.mrliu.community.model.Question;
 import com.mrliu.community.model.User;
@@ -32,11 +34,13 @@ public class PublishController {
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
+        model.addAttribute("tagList", TagCache.get());
         return "publish";
     }
 
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(Model model){
+        model.addAttribute("tagList", TagCache.get());
         return "publish";
     }
 
@@ -49,10 +53,8 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
+        model.addAttribute("tagList", TagCache.get());
 
-//        model.addAttribute("title",question.getTitle());
-//        model.addAttribute("description",question.getDescription());
-//        model.addAttribute("tag",question.getTag());
         //判断几种不符合的情况
         if(title == null || "".equals(title)){
             model.addAttribute("error", "标题不能为空");
@@ -64,6 +66,11 @@ public class PublishController {
         }
         if(tag == null || "".equals(tag)){
             model.addAttribute("error", "标签不能为空");
+            return "publish";
+        }
+        String invalidTags = TagCache.filterInvalid(tag);
+        if(StrUtil.isNotBlank(invalidTags)){
+            model.addAttribute("error", "输入的非法标签为:" + invalidTags);
             return "publish";
         }
 

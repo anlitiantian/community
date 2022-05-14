@@ -34,7 +34,7 @@ public class IndexController {
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model,
                         @RequestParam(name = "page",defaultValue = "1")Integer pageNo,
-                        @RequestParam(name = "size",defaultValue = "2")Integer size){
+                        @RequestParam(name = "size",defaultValue = "10")Integer size){
 
         //前端只传了页码，其实每页显示的记录数也可以是个固定值
         PageInfo<QuestionDTO> questionDTOList = questionService.list(pageNo, size);

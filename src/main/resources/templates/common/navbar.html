@@ -43,6 +43,13 @@
                 <li class="nav-item active" th:if="${session.user != null}">
                     <a class="nav-link" href="/publish">提问<span class="sr-only">(current)</span></a>
                 </li>
+                <li th:if="${session.user != null}">
+                    <a href="/profile/replies">
+                        <button type="button" class="btn btn-primary">
+                            通知 <span class="badge badge-light" th:text="${session.unreadNotification}">4555</span>
+                        </button>
+                    </a>
+                </li>
                 <li class="nav-item dropdown" th:if="${session.user != null}">
                     <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownUserLink"
                        data-toggle="dropdown" th:text="${session.user.getName()}"></a>

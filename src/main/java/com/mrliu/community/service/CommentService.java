@@ -2,6 +2,8 @@ package com.mrliu.community.service;
 
 import com.mrliu.community.dto.CommentDTO;
 import com.mrliu.community.enums.CommentTypeEnum;
+import com.mrliu.community.enums.NotificationStatusEnum;
+import com.mrliu.community.enums.NotificationTypeEnum;
 import com.mrliu.community.exception.CustomizeErrorCode;
 import com.mrliu.community.exception.CustomizeException;
 import com.mrliu.community.mapper.*;
@@ -14,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +42,9 @@ public class CommentService {
     @Autowired
     private QuestionExcMapper questionExcMapper;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     @Transactional
     public void insert(Comment comment) {
         if(comment.getParentId() == null || comment.getParentId() == 0){
@@ -55,10 +59,15 @@ public class CommentService {
             if(dbComment == null){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
+            // 插入评论
             commentMapper.insertSelective(comment);
 
+            // 增加评论数
             dbComment.setCommentCount(1);
             commentEtxMapper.increaseComment(dbComment);
+
+            // 插入通知
+            createNotify(comment, NotificationTypeEnum.REPLY_COMMENT, dbComment.getCommentator(), dbComment.getParentId());
         }else {
             // 回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -69,7 +78,22 @@ public class CommentService {
 
             question.setCommentCount(1);
             questionExcMapper.increaseComment(question);
+
+            //插入通知
+            createNotify(comment,NotificationTypeEnum.REPLY_QUESTION, question.getCreator(), question.getId());
         }
+    }
+
+    private void createNotify(Comment comment, NotificationTypeEnum type, String receiverId, Long questionId) {
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(type.getType());
+        notification.setParentId(comment.getParentId());
+        notification.setQuestionId(questionId);
+        notification.setNotifier(comment.getCommentator());
+        notification.setReceiver(receiverId);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notificationMapper.insert(notification);
     }
 
     public List<CommentDTO> listByParentId(Long id, CommentTypeEnum type) {

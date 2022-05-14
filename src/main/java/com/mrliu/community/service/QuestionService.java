@@ -40,7 +40,7 @@ public class QuestionService {
 
     public PageInfo<QuestionDTO> list(int pageNo, int size) {
         PageHelper.startPage(pageNo, size);
-        List<Question> questions = questionMapper.selectByExample(new QuestionExample());
+        List<Question> questions = questionMapper.selectByExampleWithBLOBs(new QuestionExample());
 
         //导航条默认显示5个
         PageInfo<Question> questionPageInfo = new PageInfo<>(questions, 5);
@@ -71,6 +71,7 @@ public class QuestionService {
 
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(accountId);
+        questionExample.setOrderByClause("gmt_create desc");
         List<Question> questions = questionMapper.selectByExample(questionExample);
 
         //导航条默认显示5个

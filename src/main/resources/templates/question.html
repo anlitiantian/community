@@ -13,11 +13,26 @@
     <link th:href="@{/css/bootstrap-reboot.min.css}" rel="stylesheet">
     <link th:href="@{/css/community.css}" rel="stylesheet">
 
+
     <script th:src="@{/js/jquery.min.js}" type="application/javascript"></script>
     <script th:src="@{/js/bootstrap.bundle.min.js}" type="application/javascript"></script>
     <script th:src="@{/js/bootstrap.min.js}" type="application/javascript"></script>
     <script th:src="@{/js/community.js}" type="application/javascript"></script>
     <script th:src="@{/js/moment.js}" type="application/javascript"></script>
+
+    <!--富文本-->
+    <link rel="stylesheet" type="text/css" href="/css/simditor.css"/>
+    <script type="text/javascript" src="/js/module.js"></script>
+    <script type="text/javascript" src="/js/hotkeys.js"></script>
+    <script type="text/javascript" src="/js/uploader.js"></script>
+    <script type="text/javascript" src="/js/simditor.js"></script>
+    <!--markdown-->
+    <script type="text/javascript" src="/js/marked.min.js"></script>
+    <script type="text/javascript" src="/js/to-markdown.js"></script>
+    <script type="text/javascript" src="/js/simditor-markdown.js"></script>
+
+    <link rel="stylesheet" href="/css/simditor-markdown.css" media="screen" charset="utf-8" />
+
 
 </head>
 <body>
@@ -47,7 +62,12 @@
                 </span>
                 <hr>
                 <!--正文-->
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" th:text="${question.description}"></div>
+                <div id="editorContent" class="noticeDetailBody simditor-body hide" th:text="${question.description}"></div>
+                <script>
+                    var editor = $("#editorContent")[0];
+                    $(editor).removeClass("hide").html(editor.textContent)
+                </script>
+
                 <hr>
                 <div style="display: table">
                     <a th:href="@{'/publish/' + ${question.id}}" class="community-menu"
@@ -149,7 +169,20 @@
                 </div>
 
                 <input type="hidden" id="question_id" th:value="${question.id}">
-                <textarea class="form-control comment" id="comment_content" rows="8" placeholder="写下你的评论..."></textarea>
+
+                <!--<textarea class="form-control comment" id="comment_content" rows="8" placeholder="写下你的评论..."></textarea>-->
+
+                <textarea id="comment_content" placeholder="写下你的评论..." autofocus></textarea>
+                <script type="text/javascript">
+                    var editor = new Simditor({
+                        textarea: $('#comment_content'),
+                        markdown: true,
+                        toolbar: ['bold', 'italic', 'underline', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code',
+                            '|', 'link','image', '|', 'indent','outdent','markdown']
+                        //optional options
+                    });
+                </script>
+
                 <button type="button" class="btn btn-success" onclick="post()" style="float: right;margin-bottom: 15px">
                     回复
                 </button>
