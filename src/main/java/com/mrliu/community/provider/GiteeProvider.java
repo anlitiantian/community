@@ -30,7 +30,7 @@ public class GiteeProvider {
 
         OkHttpClient client = new OkHttpClient();
 
-        RequestBody body = RequestBody.create(JSON.toJSONString(accessTokenDto), mediaType);
+        RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDto));
         Request request = new Request.Builder()
                 .url(accessTokenUri)
                 .post(body)

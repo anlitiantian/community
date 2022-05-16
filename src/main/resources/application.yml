@@ -29,3 +29,10 @@ pagehelper:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+
+# qiniuyun
+qiniu:
+  accessKey: qC5AE63lVkFoEYqpyzCt9WyFV8H8kLh57ZntHZZa # 公钥
+  secretKey: wqIIQ81JNjplCwJAV1dtgZumqNsEzGX0XD6nUxFB # 私钥
+  bucketName: sevenfish  #存储空间名称
+  path: http://photo.4668251.top

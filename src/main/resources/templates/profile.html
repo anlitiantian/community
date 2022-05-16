@@ -37,7 +37,7 @@
                 <div class="media" th:each="question : ${sectionContent.getList()}" th:if="${sectionContent != null}">
                     <div>
                         <a href="#">
-                            <img class="mr-3 img-thumbnail media-object" alt="Bootstrap Media Preview"
+                            <img class="mr-3 img-thumbnail media-object" alt="头像没了~" onerror="this.src='/images/avatar.png'"
                                  th:src="${question.user.avatarUrl}"/>
                         </a>
                     </div>
