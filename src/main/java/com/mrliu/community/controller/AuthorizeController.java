@@ -2,12 +2,12 @@ package com.mrliu.community.controller;
 
 import com.mrliu.community.dto.AccessTokenDTO;
 import com.mrliu.community.dto.GiteeUser;
-import com.mrliu.community.dto.GithubUser;
 import com.mrliu.community.mapper.UserMapper;
 import com.mrliu.community.model.User;
 import com.mrliu.community.provider.GiteeProvider;
 import com.mrliu.community.provider.GithubProvider;
 import com.mrliu.community.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 /**
@@ -27,6 +26,7 @@ import java.util.UUID;
  * @create: 2022-04-25 20:14
  **/
 @Controller
+@Slf4j
 public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
@@ -59,6 +59,10 @@ public class AuthorizeController {
         accessTokenDTO.setCode(code);
         accessTokenDTO.setClient_secret(clientSecret);
         accessTokenDTO.setRedirect_uri(redirectUri);
+
+        // 将redirectUri存入session，供页面登录使用
+        request.getSession().setAttribute("redirectUri",redirectUri);
+
         //1.获取access_token
         String accessToken = giteeProvider.getAccessToken(accessTokenDTO);
         //2.通过access_token获取用户信息
@@ -80,6 +84,7 @@ public class AuthorizeController {
 
             return "redirect:/";
         } else {
+
             // 登录失败，重新登录
             return "redirect:/";
         }
