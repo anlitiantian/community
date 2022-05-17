@@ -3,6 +3,7 @@
 <head>
     <!-- 必须的 meta 标签 -->
     <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -38,7 +39,7 @@
 <body>
 
 <!--从公共部分提取导航条-->
-<div th:replace="common/navbar :: header"></div>
+<div th:replace="common/common :: header"></div>
 <div class="myContainer-fluid profile">
     <div class="row">
         <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -129,7 +130,6 @@
                             <!--二级评论-->
                             <div class="collapse" th:id="${'comment-' + comment.id}">
                                 <div class="card card-body">
-
                                     <div style="margin-top: 10px">
                                         <input type="text" class="form-control" placeholder="你有意见？评论一下。"
                                                th:id="${'input-' + comment.id}">
@@ -141,7 +141,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <hr>
@@ -158,12 +157,12 @@
                     <div>
                         <a href="#">
                             <img class="img-rounded media-object" alt="头像没了~" onerror="this.src='/images/avatar.png'"
-                                 th:src="${question.user.avatarUrl}"/>
+                                 th:src="${session.user != null ? session.user.avatarUrl : '/images/default.png'}"/>
                         </a>
                     </div>
                     <div class="media-body">
                         <h5 class="mt-0">
-                            <a href="#" th:text="${question.user.name}"></a>
+                            <a href="#" th:text="${session.user != null ? session.user.name : '匿名用户'}"></a>
                         </h5>
                     </div>
                 </div>
@@ -221,5 +220,7 @@
     </div>
 </div>
 
+<!--页脚-->
+<div th:replace="common/common :: footer"></div>
 </body>
 </html>

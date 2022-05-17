@@ -65,7 +65,6 @@ public class CommentService {
             // 增加评论数
             dbComment.setCommentCount(1);
             commentEtxMapper.increaseComment(dbComment);
-
             // 插入通知
             createNotify(comment, NotificationTypeEnum.REPLY_COMMENT, dbComment.getCommentator(), dbComment.getParentId());
         }else {
@@ -85,6 +84,9 @@ public class CommentService {
     }
 
     private void createNotify(Comment comment, NotificationTypeEnum type, String receiverId, Long questionId) {
+        if(comment.getCommentator().equals(receiverId)){
+            return;
+        }
         Notification notification = new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setType(type.getType());

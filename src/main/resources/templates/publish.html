@@ -3,6 +3,7 @@
 <head>
     <!-- 必须的 meta 标签 -->
     <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -35,7 +36,7 @@
 <body>
 
 <!--从公共部分提取导航条-->
-<div th:replace="common/navbar :: header"></div>
+<div th:replace="common/common :: header"></div>
 
 <div class="myContainer-fluid main">
     <div class="row">
@@ -146,5 +147,8 @@
         </div>
     </div>
 </div>
+
+<!--页脚-->
+<div th:replace="common/common :: footer"></div>
 </body>
 </html>

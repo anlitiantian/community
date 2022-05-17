@@ -90,7 +90,7 @@ public class NotificationService {
         notification.setStatus(NotificationStatusEnum.READ.getStatus());
         notificationMapper.updateByPrimaryKey(notification);
 
-        if (!notification.getNotifier().equals(user.getAccountId())) {
+        if (!notification.getReceiver().equals(user.getAccountId())) {
             throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICATION_FAIL);
         }
         if (notification == null) {

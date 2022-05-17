@@ -28,4 +28,15 @@
     <select id="selectRelated" parameterType="com.mrliu.community.model.Question" resultMap="BaseResultMap">
         select * FROM question where id != #{id} and tag REGEXP #{tag}
     </select>
+
+    <select id="selectRelatedByWord" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * FROM question
+        <where>
+            <if test="search != null and search != ''">
+                and title REGEXP #{search}
+            </if>
+        </where>
+        order by gmt_create desc
+    </select>
+
 </mapper>

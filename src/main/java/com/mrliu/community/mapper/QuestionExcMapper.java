@@ -1,6 +1,7 @@
 package com.mrliu.community.mapper;
 
 import com.mrliu.community.model.Question;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,7 @@ public interface QuestionExcMapper {
     int increaseComment(Question row);
     // 根据传入question的tag查相关问题
     List<Question> selectRelated(Question question);
+
+    // 根据关键词查找相关问题
+    List<Question> selectRelatedByWord(@Param("search")String search);
 }

@@ -38,9 +38,14 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public PageInfo<QuestionDTO> list(int pageNo, int size) {
+    public PageInfo<QuestionDTO> list(String search, int pageNo, int size) {
         PageHelper.startPage(pageNo, size);
-        List<Question> questions = questionMapper.selectByExampleWithBLOBs(new QuestionExample());
+
+        // 按检索词搜索
+        if(StrUtil.isNotBlank(search)){
+            search = search.replace(" ", "|");
+        }
+        List<Question> questions = questionExcMapper.selectRelatedByWord(search);
 
         //导航条默认显示5个
         PageInfo<Question> questionPageInfo = new PageInfo<>(questions, 5);

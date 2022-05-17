@@ -1,5 +1,6 @@
 package com.mrliu.community.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageInfo;
 import com.mrliu.community.dto.QuestionDTO;
 import com.mrliu.community.mapper.QuestionMapper;
@@ -33,12 +34,16 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model,
-                        @RequestParam(name = "page",defaultValue = "1")Integer pageNo,
-                        @RequestParam(name = "size",defaultValue = "10")Integer size){
+                        @RequestParam(name = "page", defaultValue = "1") Integer pageNo,
+                        @RequestParam(name = "size", defaultValue = "10") Integer size,
+                        @RequestParam(name = "search", required = false) String search) {
 
         //前端只传了页码，其实每页显示的记录数也可以是个固定值
-        PageInfo<QuestionDTO> questionDTOList = questionService.list(pageNo, size);
+        PageInfo<QuestionDTO> questionDTOList = questionService.list(search, pageNo, size);
         model.addAttribute("questions", questionDTOList);
+        if(StrUtil.isNotBlank(search)){
+            model.addAttribute("search", search);
+        }
         return "index";
     }
 }

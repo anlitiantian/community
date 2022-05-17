@@ -3,6 +3,7 @@
 <head>
     <!-- 必须的 meta 标签 -->
     <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -31,7 +32,7 @@
 
 
 <!--从公共部分提取导航条-->
-<div th:replace="common/navbar :: header"></div>
+<div th:replace="common/common :: header"></div>
 <div class="myContainer-fluid">
     <div class="row">
         <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -43,7 +44,7 @@
                 发现
             </h2>
             <hr>
-            <div class="media" th:each="question : ${questions.getList()}" th:if="${questions != null}">
+            <div class="media" th:each="question,questionStat : ${questions.getList()}" th:if="${questions != null}">
                 <div>
                     <a href="#">
                         <img class="mr-3 img-thumbnail media-object" alt="头像没了~" onerror="this.src='/images/avatar.png'"
@@ -54,7 +55,24 @@
                     <h4 class="mt-0">
                         <a th:href="@{'/question/' + ${question.id}}" th:text="${question.title}"></a>
                     </h4>
-                    <span th:text="${question.description}"></span><br>
+
+                    <!--描述-->
+                    <span>
+                        <div th:id="${question.id}" class="noticeDetailBody simditor-body hide title"
+                             th:text="${question.description}" style="max-height: 150px;overflow: hidden"></div>
+                    </span>
+                    <script>
+                        $(function () {
+                            let arrs = document.getElementsByClassName("noticeDetailBody simditor-body hide title");
+                            for(let i = 0; i < arrs.length; i++){
+                                let editor = $(arrs[i])[0];
+                                $(editor).removeClass("hide").html(editor.textContent)
+                            }
+                        });
+                    </script>
+
+                    <!--<span th:text="${question.description}"></span><br>-->
+
                     <span class="text_desc">
                          <span th:text="${question.commentCount}"></span> 个回复 * [[${question.viewCount}]] 次浏览 * [[${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}]]
                     </span>
@@ -65,24 +83,24 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-end">
                     <li>
-                        <a class="page-link" th:href="@{/(page=1)}">&lt;&lt;</a>
+                        <a class="page-link" th:href="@{/(page=1,search=${search})}">&lt;&lt;</a>
                         <!--<a class="page-link" th:href="@{/page/1}">&lt;&lt;</a>-->
                     </li>
                     <li th:if="${questions.hasPreviousPage}">
-                        <a class="page-link" th:href="@{/(page=${questions.prePage})}">&lt;</a>
+                        <a class="page-link" th:href="@{/(page=${questions.prePage}, search=${search})}">&lt;</a>
                         <!--<a class="page-link" th:href="@{'/page/' + ${questions.prePage}}">&lt;</a>-->
                     </li>
                     <li th:each="page : ${questions.getNavigatepageNums}"
                         th:class="${questions.pageNum == page} ? 'active page-link':'page-link'">
-                        <a th:href="@{/(page=${page})}" th:text="${page}"></a>
+                        <a th:href="@{/(page=${page}, search=${search})}" th:text="${page}"></a>
                         <!--<a th:href="@{'/page/' + ${page}}" th:text="${page}"></a>-->
                     </li>
                     <li th:if="${questions.hasNextPage}">
-                        <a class="page-link" th:href="@{/(page=${questions.nextPage})}">&gt;</a>
+                        <a class="page-link" th:href="@{/(page=${questions.nextPage}, search=${search})}">&gt;</a>
                         <!--<a class="page-link" th:href="@{'/page/' + ${questions.nextPage}}">&gt;</a>-->
                     </li>
                     <li>
-                        <a class="page-link" th:href="@{/(page=${questions.getPages()})}">&gt;&gt;</a>
+                        <a class="page-link" th:href="@{/(page=${questions.getPages()}, search=${search})}">&gt;&gt;</a>
                         <!--<a class="page-link" th:href="@{'/page/' + ${questions.getPages()}}">&gt;&gt;</a>-->
                     </li>
 
@@ -97,6 +115,10 @@
         </div>
     </div>
 </div>
+
+<!--页脚-->
+<div th:replace="common/common :: footer"></div>
+
 
 </body>
 </html>
